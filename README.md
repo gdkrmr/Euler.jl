@@ -9,7 +9,7 @@ From https://projecteuler.net:
 
 # Euler.jl
 
-This is a julia package that contains preset functions and code to verify the results.
+This is a julia package that contains function templates for Project Euler and code to verify the results.
 
 ## How to use it:
 
