@@ -32,3 +32,6 @@ The package tests will check your results. You can run the tests with
 I have not tested if all the solutions are valid! I you think your solution is
 correct and the test is not, please let me know!
 
+# Note
+
+Pick your fight! There are 857 problems to solve! There will be many that you won't be able to understand. Just choose the ones you feel comfortable with!
