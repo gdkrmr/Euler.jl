@@ -34,4 +34,8 @@ correct and the test is not, please let me know!
 
 # Note
 
-Pick your fight! There are 857 problems to solve! There will be many that will be too complicated, just choose the ones you feel comfortable with!
+- Pick your fight! There are 857 problems to solve! There will be many that will
+  be too complicated, just choose the ones you feel comfortable with!
+- [Project Euler](https://projecteuler.net/) is published under a [CC BY-NC-SA
+  4.0 License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+

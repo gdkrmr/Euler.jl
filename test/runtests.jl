@@ -2,8 +2,10 @@ using Test
 using Euler
 
 
-# Solution taken from https://github.com/luckytoilet/projecteuler-solutions/blob/master/Solutions.md
-# # Project Euler solutions collected by Luckytoilet and others.
+# Solution taken from
+# https://github.com/luckytoilet/projecteuler-solutions/blob/master/Solutions.md
+# ((c) 2023 Luckytoilet and others, MIT License)
+
 # # https://github.com/luckytoilet/projecteuler-solutions
 # # https://www.tapatalk.com/groups/eulersolutionsfr/
 
