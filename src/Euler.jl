@@ -42,7 +42,6 @@ end
 # https://projecteuler.net/problem=3
 export euler3
 function euler3()
-end
 
 end
 # https://projecteuler.net/problem=4
