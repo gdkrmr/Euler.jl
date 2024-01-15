@@ -477,9 +477,18 @@ end
 
 # https://projecteuler.net/problem=15
 export euler15
+# euler 15
 function euler15()
-
+    # function factorial(n)
+    #     if n == 0
+    #         return 1
+    #     else
+    #         return n*factorial(n-1)
+    #     end
+    # end
+    # return factorial(40)/(factorial(20)*factorial(20))
 end
+
 # https://projecteuler.net/problem=16
 export euler16
 function euler16()
@@ -572,7 +581,59 @@ end
 export euler18
 function euler18()
 
+    data = [
+        [75],
+        [95, 64],
+        [17, 47, 82],
+        [18, 35, 87, 10],
+        [20, 04, 82, 47, 65],
+        [19, 01, 23, 75, 03, 34],
+        [88, 02, 77, 73, 07, 63, 67],
+        [99, 65, 04, 28, 06, 16, 70, 92],
+        [41, 41, 26, 56, 83, 40, 80, 70, 33],
+        [41, 48, 72, 33, 47, 32, 37, 16, 94, 29],
+        [53, 71, 44, 65, 25, 43, 91, 52, 97, 51, 14],
+        [70, 11, 33, 28, 77, 73, 17, 78, 39, 68, 17, 57],
+        [91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48],
+        [63, 66, 04, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31],
+        [04, 62, 98, 27, 23, 09, 70, 98, 73, 93, 38, 53, 60, 04, 23]
+    ]
+
+    # # greedy does not work!
+    # s = data[1][1]
+    # j = 1
+    # for i in 2:length(data)
+    #     j = data[i][j] > data[i][j+1] ? j : j+1
+    #     s += data[i][j]
+    # end
+    # return s
+
+    function val(data, path)
+        s = 0
+        for i in 1:length(data)
+            s += data[i][path[i]]
+        end
+        return s
+    end
+
+    path = repeat([1], length(data))
+    maxval = val(data, path)
+
+    for j in 1:length(data) - 1
+        for i in 1:j - 1
+            path[end - i + 1] += 1
+            show(path)
+            println()
+            v = val(data, path)
+            if v > maxval
+                maxval = v
+            end
+        end
+    end
+
+    return maxval
 end
+
 # https://projecteuler.net/problem=19
 export euler19
 function euler19()
