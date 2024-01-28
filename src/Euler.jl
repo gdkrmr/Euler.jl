@@ -24,7 +24,7 @@ module Euler
 
 MAXEULER = 857
 for i in 1:MAXEULER
-	@eval export $(Symbol("euler" * string(i)))
+  @eval export $(Symbol("euler" * string(i)))
 end
 
 
@@ -39,13 +39,13 @@ https://projecteuler.net/problem=1
 - use a for loop to check numbers
 """
 function euler1()
-    s = 0
-    for i in 1:999
-        if i % 3 == 0 || i % 5 == 0
-            s += i
-        end
+  s = 0
+  for i in 1:999
+    if i % 3 == 0 || i % 5 == 0
+      s += i
     end
-    return s
+  end
+  return s
 end
 
 """
@@ -53,22 +53,22 @@ end
 
 https://projecteuler.net/problem=2
 
-# Hints: 
+# Hints:
 
 - x % y: modulus, returns the remainder of x divided by y
 - Fibonacci numbers: x1 = 1, x2 = 2, x3 = x1 + x2, x4 = x3 + x2, ...
 """
 function euler2()
-    s = 0
-    a = 1
-    b = 2
-    while a < 4_000_000
-        if a % 2 == 0
-            s += a
-        end
-        a, b = b, a + b
+  s = 0
+  a = 1
+  b = 2
+  while a < 4_000_000
+    if a % 2 == 0
+      s += a
     end
-    return s
+    a, b = b, a + b
+  end
+  return s
 end
 
 """
@@ -76,36 +76,35 @@ end
 
 https://projecteuler.net/problem=3
 
-# Hints: 
+# Hints:
 
-- successively divide by small numbers until you cannot any more will also give the largest prime factor
-- a factor can occurr more than once
+- successively divide by small numbers until you cannot any more will also give
+  the largest prime factor a factor can occurr more than once
 
 """
 function euler3()
-    n = 600851475143
-    i = 2
-    while i < n
-        d, r = divrem(n, i)
-        if r == 0
-            n = d
-        else
-            i += 1
-        end
+  n = 600851475143
+  i = 2
+  while i < n
+    d, r = divrem(n, i)
+    if r == 0
+      n = d
+    else
+      i += 1
     end
-    return n
-
+  end
+  return n
 end
 
 # copilot was not able to solve this, but it was able to define this function
 # that solved it
 function reverse_int(n)
-    m = 0
-    while n > 0
-        m = m * 10 + n % 10
-        n = div(n, 10)
-    end
-    return m
+  m = 0
+  while n > 0
+    n, r = divrem(n, 10)
+    m = m * 10 + r
+  end
+  return m
 end
 
 # copilot did not solve this one on first try
@@ -114,25 +113,24 @@ end
 
 https://projecteuler.net/problem=4
 
-# Hints: 
+# Hints:
 - use two for loops to loop over all combinations of three digit numbers
 - you can save half of the work, because x*y == y*x
 - write a function that reverses an integer in the decimal system
   - slow version: convert to string, reverse string, parse to number
-  - fast version: use x % 10 to get
-
+- fast version: use divrem(n, 10) -> "left digits", "smallest digits"
 """
 function euler4()
-    m = 0
-    for i in 100:999
-        for j in 100:999
-            n = i * j
-            if n > m && n == reverse_int(n)
-                m = n
-            end
-        end
+  m = 0
+  for i in 100:999
+    for j in 100:999
+      n = i * j
+      if n > m && n == reverse_int(n)
+        m = n
+      end
     end
-    return m
+  end
+  return m
 end
 
 """
@@ -140,46 +138,69 @@ end
 
 https://projecteuler.net/problem=5
 
-# Hints: 
+# Hints:
+- checkout the documentation for lcm()
+- This is still solvable with brute force.
 """
 function euler5()
-    n = 1
-    for i in 1:20
-        n = lcm(n, i)
-    end
-    return n
+  n = 1
+  for i in 1:20
+    n = lcm(n, i)
+  end
+  return n
 end
+
+# The brute force variant takes a while
+function euler5()
+  n = 20
+  d = 1
+  while d <= typemax(n)
+    for i in 1:n
+      if d % i != 0
+        d += 1
+        break
+      end
+      if i == n
+        return d
+      end
+    end
+  end
+end
+
+euler5() = lcm(1:20...)
+
 
 """
 #Exercise:
 
 https://projecteuler.net/problem=6
 
-# Hints: 
+# Hints:
+- Should be straight forward.
 """
 function euler6()
-    s = 0
-    for i in 1:100
-        s += i
-    end
-    s = s^2
-    for i in 1:100
-        s -= i^2
-    end
-    return s
+  s = 0
+  for i in 1:100
+    s += i
+  end
+  s = s^2
+  for i in 1:100
+    s -= i^2
+  end
+  return s
 end
 
 # copilot defined this one and solved euler7
 function isprime(x)
-    if x < 2
-        return false
+  if x < 2
+    return false
+  end
+  for i in 2:floor(Int, sqrt(x))
+    if x % i == 0
+      return false
     end
-    for i in 2:floor(Int, sqrt(x))
-        if x % i == 0
-            return false
-        end
-    end
-    return true
+  end
+  return true
 end
 
 # copilot did not solve this one on first try! It just assumed there was an
@@ -191,17 +212,55 @@ end
 https://projecteuler.net/problem=7
 
 # Hints: 
+- A prime number  is a number that is only divisible by 1 and itself.
+- You only have to check for divisors up to sqrt(n).
+- You only have to check prime numbers as divisors.
 """
 function euler7()
-    n = 0
-    i = 0
-    while n < 10001
-        i += 1
-        if isprime(i)
-            n += 1
-        end
+  n = 0
+  i = 0
+  while n < 10001
+    i += 1
+    if isprime(i)
+      n += 1
     end
-    return i
+  end
+  return i
+end
+
+# This is still 100x slower than Primes.prime...
+function euler7(n = 10_001)
+  if n < 1 
+    return Int[]
+  end
+  #n = 10_001
+  # preallocate vector for speed, the vector will contain all first n primes
+  primes = Vector{Int}(undef, n)
+  primes[1] = 2
+  # the number to test if it is prime
+  num = 2
+  # - i points to the ith prime stored as primes[i]
+  # - for 2:1 end does nothing, which makes n = 1 work!
+  for i in 2:n 
+    @label restart
+    num += 1
+    # test for the already found primes
+    for j in 1:(i - 1) 
+      if num % primes[j] == 0
+        @goto restart
+      end
+    end
+    # we have to try everything above one by one
+    # TODO: we can still optimize not testing all multiples of previous primes.
+    for j in primes[i - 1] + 1:floor(Int, sqrt(num))
+      if num % j == 0
+        @goto restart
+      end
+    end
+    # num is a prime!
+    primes[i] = num
+  end
+  return primes[end]
 end
 
 # copilot could not solve this one, I had to do it by hand. Probably because it
@@ -213,65 +272,71 @@ end
 https://projecteuler.net/problem=8
 
 # Hints: 
+- prod([1, 2, 3]) calculates the product of an array
+- *(1, 2, 3) calculates the product of scalars
+- reduce(*, [1, 2, 3]) is the same as prod
+- 1:10 is a range and data[1:10] copies contiguous indices from an array
+- 1:10 + 1 is the same as 1:11 and 1:10 .+ 1 is the same as 2:11
+- @view data[1:10] creates a View and avoids copying data.
 """
 function euler8()
 
-    data = [
-        7, 3, 1, 6, 7, 1, 7, 6, 5, 3, 1, 3, 3, 0, 6, 2, 4, 9, 1, 9, 2, 2, 5, 1,
-        1, 9, 6, 7, 4, 4, 2, 6, 5, 7, 4, 7, 4, 2, 3, 5, 5, 3, 4, 9, 1, 9, 4, 9,
-        3, 4, 9, 6, 9, 8, 3, 5, 2, 0, 3, 1, 2, 7, 7, 4, 5, 0, 6, 3, 2, 6, 2, 3,
-        9, 5, 7, 8, 3, 1, 8, 0, 1, 6, 9, 8, 4, 8, 0, 1, 8, 6, 9, 4, 7, 8, 8, 5,
-        1, 8, 4, 3, 8, 5, 8, 6, 1, 5, 6, 0, 7, 8, 9, 1, 1, 2, 9, 4, 9, 4, 9, 5,
-        4, 5, 9, 5, 0, 1, 7, 3, 7, 9, 5, 8, 3, 3, 1, 9, 5, 2, 8, 5, 3, 2, 0, 8,
-        8, 0, 5, 5, 1, 1, 1, 2, 5, 4, 0, 6, 9, 8, 7, 4, 7, 1, 5, 8, 5, 2, 3, 8,
-        6, 3, 0, 5, 0, 7, 1, 5, 6, 9, 3, 2, 9, 0, 9, 6, 3, 2, 9, 5, 2, 2, 7, 4,
-        4, 3, 0, 4, 3, 5, 5, 7, 6, 6, 8, 9, 6, 6, 4, 8, 9, 5, 0, 4, 4, 5, 2, 4,
-        4, 5, 2, 3, 1, 6, 1, 7, 3, 1, 8, 5, 6, 4, 0, 3, 0, 9, 8, 7, 1, 1, 1, 2,
-        1, 7, 2, 2, 3, 8, 3, 1, 1, 3, 6, 2, 2, 2, 9, 8, 9, 3, 4, 2, 3, 3, 8, 0,
-        3, 0, 8, 1, 3, 5, 3, 3, 6, 2, 7, 6, 6, 1, 4, 2, 8, 2, 8, 0, 6, 4, 4, 4,
-        4, 8, 6, 6, 4, 5, 2, 3, 8, 7, 4, 9, 3, 0, 3, 5, 8, 9, 0, 7, 2, 9, 6, 2,
-        9, 0, 4, 9, 1, 5, 6, 0, 4, 4, 0, 7, 7, 2, 3, 9, 0, 7, 1, 3, 8, 1, 0, 5,
-        1, 5, 8, 5, 9, 3, 0, 7, 9, 6, 0, 8, 6, 6, 7, 0, 1, 7, 2, 4, 2, 7, 1, 2,
-        1, 8, 8, 3, 9, 9, 8, 7, 9, 7, 9, 0, 8, 7, 9, 2, 2, 7, 4, 9, 2, 1, 9, 0,
-        1, 6, 9, 9, 7, 2, 0, 8, 8, 8, 0, 9, 3, 7, 7, 6, 6, 5, 7, 2, 7, 3, 3, 3,
-        0, 0, 1, 0, 5, 3, 3, 6, 7, 8, 8, 1, 2, 2, 0, 2, 3, 5, 4, 2, 1, 8, 0, 9,
-        7, 5, 1, 2, 5, 4, 5, 4, 0, 5, 9, 4, 7, 5, 2, 2, 4, 3, 5, 2, 5, 8, 4, 9,
-        0, 7, 7, 1, 1, 6, 7, 0, 5, 5, 6, 0, 1, 3, 6, 0, 4, 8, 3, 9, 5, 8, 6, 4,
-        4, 6, 7, 0, 6, 3, 2, 4, 4, 1, 5, 7, 2, 2, 1, 5, 5, 3, 9, 7, 5, 3, 6, 9,
-        7, 8, 1, 7, 9, 7, 7, 8, 4, 6, 1, 7, 4, 0, 6, 4, 9, 5, 5, 1, 4, 9, 2, 9,
-        0, 8, 6, 2, 5, 6, 9, 3, 2, 1, 9, 7, 8, 4, 6, 8, 6, 2, 2, 4, 8, 2, 8, 3,
-        9, 7, 2, 2, 4, 1, 3, 7, 5, 6, 5, 7, 0, 5, 6, 0, 5, 7, 4, 9, 0, 2, 6, 1,
-        4, 0, 7, 9, 7, 2, 9, 6, 8, 6, 5, 2, 4, 1, 4, 5, 3, 5, 1, 0, 0, 4, 7, 4,
-        8, 2, 1, 6, 6, 3, 7, 0, 4, 8, 4, 4, 0, 3, 1, 9, 9, 8, 9, 0, 0, 0, 8, 8,
-        9, 5, 2, 4, 3, 4, 5, 0, 6, 5, 8, 5, 4, 1, 2, 2, 7, 5, 8, 8, 6, 6, 6, 8,
-        8, 1, 1, 6, 4, 2, 7, 1, 7, 1, 4, 7, 9, 9, 2, 4, 4, 4, 2, 9, 2, 8, 2, 3,
-        0, 8, 6, 3, 4, 6, 5, 6, 7, 4, 8, 1, 3, 9, 1, 9, 1, 2, 3, 1, 6, 2, 8, 2,
-        4, 5, 8, 6, 1, 7, 8, 6, 6, 4, 5, 8, 3, 5, 9, 1, 2, 4, 5, 6, 6, 5, 2, 9,
-        4, 7, 6, 5, 4, 5, 6, 8, 2, 8, 4, 8, 9, 1, 2, 8, 8, 3, 1, 4, 2, 6, 0, 7,
-        6, 9, 0, 0, 4, 2, 2, 4, 2, 1, 9, 0, 2, 2, 6, 7, 1, 0, 5, 5, 6, 2, 6, 3,
-        2, 1, 1, 1, 1, 1, 0, 9, 3, 7, 0, 5, 4, 4, 2, 1, 7, 5, 0, 6, 9, 4, 1, 6,
-        5, 8, 9, 6, 0, 4, 0, 8, 0, 7, 1, 9, 8, 4, 0, 3, 8, 5, 0, 9, 6, 2, 4, 5,
-        5, 4, 4, 4, 3, 6, 2, 9, 8, 1, 2, 3, 0, 9, 8, 7, 8, 7, 9, 9, 2, 7, 2, 4,
-        4, 2, 8, 4, 9, 0, 9, 1, 8, 8, 8, 4, 5, 8, 0, 1, 5, 6, 1, 6, 6, 0, 9, 7,
-        9, 1, 9, 1, 3, 3, 8, 7, 5, 4, 9, 9, 2, 0, 0, 5, 2, 4, 0, 6, 3, 6, 8, 9,
-        9, 1, 2, 5, 6, 0, 7, 1, 7, 6, 0, 6, 0, 5, 8, 8, 6, 1, 1, 6, 4, 6, 7, 1,
-        0, 9, 4, 0, 5, 0, 7, 7, 5, 4, 1, 0, 0, 2, 2, 5, 6, 9, 8, 3, 1, 5, 5, 2,
-        0, 0, 0, 5, 5, 9, 3, 5, 7, 2, 9, 7, 2, 5, 7, 1, 6, 3, 6, 2, 6, 9, 5, 6,
-        1, 8, 8, 2, 6, 7, 0, 4, 2, 8, 2, 5, 2, 4, 8, 3, 6, 0, 0, 8, 2, 3, 2, 5,
-        7, 5, 3, 0, 4, 2, 0, 7, 5, 2, 9, 6, 3, 4, 5, 0
-    ]
+  data = [
+    7, 3, 1, 6, 7, 1, 7, 6, 5, 3, 1, 3, 3, 0, 6, 2, 4, 9, 1, 9, 2, 2, 5, 1,
+    1, 9, 6, 7, 4, 4, 2, 6, 5, 7, 4, 7, 4, 2, 3, 5, 5, 3, 4, 9, 1, 9, 4, 9,
+    3, 4, 9, 6, 9, 8, 3, 5, 2, 0, 3, 1, 2, 7, 7, 4, 5, 0, 6, 3, 2, 6, 2, 3,
+    9, 5, 7, 8, 3, 1, 8, 0, 1, 6, 9, 8, 4, 8, 0, 1, 8, 6, 9, 4, 7, 8, 8, 5,
+    1, 8, 4, 3, 8, 5, 8, 6, 1, 5, 6, 0, 7, 8, 9, 1, 1, 2, 9, 4, 9, 4, 9, 5,
+    4, 5, 9, 5, 0, 1, 7, 3, 7, 9, 5, 8, 3, 3, 1, 9, 5, 2, 8, 5, 3, 2, 0, 8,
+    8, 0, 5, 5, 1, 1, 1, 2, 5, 4, 0, 6, 9, 8, 7, 4, 7, 1, 5, 8, 5, 2, 3, 8,
+    6, 3, 0, 5, 0, 7, 1, 5, 6, 9, 3, 2, 9, 0, 9, 6, 3, 2, 9, 5, 2, 2, 7, 4,
+    4, 3, 0, 4, 3, 5, 5, 7, 6, 6, 8, 9, 6, 6, 4, 8, 9, 5, 0, 4, 4, 5, 2, 4,
+    4, 5, 2, 3, 1, 6, 1, 7, 3, 1, 8, 5, 6, 4, 0, 3, 0, 9, 8, 7, 1, 1, 1, 2,
+    1, 7, 2, 2, 3, 8, 3, 1, 1, 3, 6, 2, 2, 2, 9, 8, 9, 3, 4, 2, 3, 3, 8, 0,
+    3, 0, 8, 1, 3, 5, 3, 3, 6, 2, 7, 6, 6, 1, 4, 2, 8, 2, 8, 0, 6, 4, 4, 4,
+    4, 8, 6, 6, 4, 5, 2, 3, 8, 7, 4, 9, 3, 0, 3, 5, 8, 9, 0, 7, 2, 9, 6, 2,
+    9, 0, 4, 9, 1, 5, 6, 0, 4, 4, 0, 7, 7, 2, 3, 9, 0, 7, 1, 3, 8, 1, 0, 5,
+    1, 5, 8, 5, 9, 3, 0, 7, 9, 6, 0, 8, 6, 6, 7, 0, 1, 7, 2, 4, 2, 7, 1, 2,
+    1, 8, 8, 3, 9, 9, 8, 7, 9, 7, 9, 0, 8, 7, 9, 2, 2, 7, 4, 9, 2, 1, 9, 0,
+    1, 6, 9, 9, 7, 2, 0, 8, 8, 8, 0, 9, 3, 7, 7, 6, 6, 5, 7, 2, 7, 3, 3, 3,
+    0, 0, 1, 0, 5, 3, 3, 6, 7, 8, 8, 1, 2, 2, 0, 2, 3, 5, 4, 2, 1, 8, 0, 9,
+    7, 5, 1, 2, 5, 4, 5, 4, 0, 5, 9, 4, 7, 5, 2, 2, 4, 3, 5, 2, 5, 8, 4, 9,
+    0, 7, 7, 1, 1, 6, 7, 0, 5, 5, 6, 0, 1, 3, 6, 0, 4, 8, 3, 9, 5, 8, 6, 4,
+    4, 6, 7, 0, 6, 3, 2, 4, 4, 1, 5, 7, 2, 2, 1, 5, 5, 3, 9, 7, 5, 3, 6, 9,
+    7, 8, 1, 7, 9, 7, 7, 8, 4, 6, 1, 7, 4, 0, 6, 4, 9, 5, 5, 1, 4, 9, 2, 9,
+    0, 8, 6, 2, 5, 6, 9, 3, 2, 1, 9, 7, 8, 4, 6, 8, 6, 2, 2, 4, 8, 2, 8, 3,
+    9, 7, 2, 2, 4, 1, 3, 7, 5, 6, 5, 7, 0, 5, 6, 0, 5, 7, 4, 9, 0, 2, 6, 1,
+    4, 0, 7, 9, 7, 2, 9, 6, 8, 6, 5, 2, 4, 1, 4, 5, 3, 5, 1, 0, 0, 4, 7, 4,
+    8, 2, 1, 6, 6, 3, 7, 0, 4, 8, 4, 4, 0, 3, 1, 9, 9, 8, 9, 0, 0, 0, 8, 8,
+    9, 5, 2, 4, 3, 4, 5, 0, 6, 5, 8, 5, 4, 1, 2, 2, 7, 5, 8, 8, 6, 6, 6, 8,
+    8, 1, 1, 6, 4, 2, 7, 1, 7, 1, 4, 7, 9, 9, 2, 4, 4, 4, 2, 9, 2, 8, 2, 3,
+    0, 8, 6, 3, 4, 6, 5, 6, 7, 4, 8, 1, 3, 9, 1, 9, 1, 2, 3, 1, 6, 2, 8, 2,
+    4, 5, 8, 6, 1, 7, 8, 6, 6, 4, 5, 8, 3, 5, 9, 1, 2, 4, 5, 6, 6, 5, 2, 9,
+    4, 7, 6, 5, 4, 5, 6, 8, 2, 8, 4, 8, 9, 1, 2, 8, 8, 3, 1, 4, 2, 6, 0, 7,
+    6, 9, 0, 0, 4, 2, 2, 4, 2, 1, 9, 0, 2, 2, 6, 7, 1, 0, 5, 5, 6, 2, 6, 3,
+    2, 1, 1, 1, 1, 1, 0, 9, 3, 7, 0, 5, 4, 4, 2, 1, 7, 5, 0, 6, 9, 4, 1, 6,
+    5, 8, 9, 6, 0, 4, 0, 8, 0, 7, 1, 9, 8, 4, 0, 3, 8, 5, 0, 9, 6, 2, 4, 5,
+    5, 4, 4, 4, 3, 6, 2, 9, 8, 1, 2, 3, 0, 9, 8, 7, 8, 7, 9, 9, 2, 7, 2, 4,
+    4, 2, 8, 4, 9, 0, 9, 1, 8, 8, 8, 4, 5, 8, 0, 1, 5, 6, 1, 6, 6, 0, 9, 7,
+    9, 1, 9, 1, 3, 3, 8, 7, 5, 4, 9, 9, 2, 0, 0, 5, 2, 4, 0, 6, 3, 6, 8, 9,
+    9, 1, 2, 5, 6, 0, 7, 1, 7, 6, 0, 6, 0, 5, 8, 8, 6, 1, 1, 6, 4, 6, 7, 1,
+    0, 9, 4, 0, 5, 0, 7, 7, 5, 4, 1, 0, 0, 2, 2, 5, 6, 9, 8, 3, 1, 5, 5, 2,
+    0, 0, 0, 5, 5, 9, 3, 5, 7, 2, 9, 7, 2, 5, 7, 1, 6, 3, 6, 2, 6, 9, 5, 6,
+    1, 8, 8, 2, 6, 7, 0, 4, 2, 8, 2, 5, 2, 4, 8, 3, 6, 0, 0, 8, 2, 3, 2, 5,
+    7, 5, 3, 0, 4, 2, 0, 7, 5, 2, 9, 6, 3, 4, 5, 0
+  ]
 
-    p = 0
-    n = 13
-    for i in 0:length(data) - n
-        r = (1:n) .+ i
-        digits = data[r]
-        pi = prod(digits)
-        if pi > p
-            p = pi
-        end
+  p = 0
+  n = 13
+  for i in 0:length(data)-n
+    r = (1:n) .+ i
+    digits = @view data[r]
+    pi = prod(digits)
+    if pi > p
+      p = pi
     end
-    return p
+  end
+  return p
 end
 
 """
@@ -280,16 +345,17 @@ end
 https://projecteuler.net/problem=9
 
 # Hints: 
+- should be straightforward
 """
 function euler9()
-    for a in 1:1000
-        for b in 1:1000
-            c = 1000 - a - b
-            if a^2 + b^2 == c^2
-                return a * b * c
-            end
-        end
+  for a in 1:1000
+    for b in a:1000
+      c = 1000 - a - b
+      if a^2 + b^2 == c^2
+        return a * b * c
+      end
     end
+  end
 end
 
 # copilot did not want to autocomplete here, maybe there is ratelimiting :shrug:
@@ -300,15 +366,16 @@ end
 https://projecteuler.net/problem=10
 
 # Hints: 
+- we created a function to check if a number is prime earlier
 """
 function euler10()
-    s = 0
-    for i in 1:1_999_999
-        if isprime(i)
-            s += i
-        end
+  s = 0
+  for i in 1:1_999_999
+    if isprime(i)
+      s += i
     end
-    return s
+  end
+  return s
 end
 
 """
@@ -317,80 +384,94 @@ end
 https://projecteuler.net/problem=11
 
 # Hints: 
+- Create a matrix with data = [1 2; 3 4]
+- A matrix can be accessed with two indices data[1, 2]
+- prod(i for i in 1:10) is a comprehension and is one possible way to multiply selectively from a dense matrix.
 """
 function euler11()
 
-    data = [
-        08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08;
-        49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00;
-        81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65;
-        52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91;
-        22 31 16 71 51 67 63 89 41 92 36 54 22 40 40 28 66 33 13 80;
-        24 47 32 60 99 03 45 02 44 75 33 53 78 36 84 20 35 17 12 50;
-        32 98 81 28 64 23 67 10 26 38 40 67 59 54 70 66 18 38 64 70;
-        67 26 20 68 02 62 12 20 95 63 94 39 63 08 40 91 66 49 94 21;
-        24 55 58 05 66 73 99 26 97 17 78 78 96 83 14 88 34 89 63 72;
-        21 36 23 09 75 00 76 44 20 45 35 14 00 61 33 97 34 31 33 95;
-        78 17 53 28 22 75 31 67 15 94 03 80 04 62 16 14 09 53 56 92;
-        16 39 05 42 96 35 31 47 55 58 88 24 00 17 54 24 36 29 85 57;
-        86 56 00 48 35 71 89 07 05 44 44 37 44 60 21 58 51 54 17 58;
-        19 80 81 68 05 94 47 69 28 73 92 13 86 52 17 77 04 89 55 40;
-        04 52 08 83 97 35 99 16 07 97 57 32 16 26 26 79 33 27 98 66;
-        88 36 68 87 57 62 20 72 03 46 33 67 46 55 12 32 63 93 53 69;
-        04 42 16 73 38 25 39 11 24 94 72 18 08 46 29 32 40 62 76 36;
-        20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16;
-        20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54;
-        01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48;
-    ]
+  data = [
+    08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08;
+    49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00;
+    81 49 31 73 55 79 14 29 93 71 40 67 53 88 30 03 49 13 36 65;
+    52 70 95 23 04 60 11 42 69 24 68 56 01 32 56 71 37 02 36 91;
+    22 31 16 71 51 67 63 89 41 92 36 54 22 40 40 28 66 33 13 80;
+    24 47 32 60 99 03 45 02 44 75 33 53 78 36 84 20 35 17 12 50;
+    32 98 81 28 64 23 67 10 26 38 40 67 59 54 70 66 18 38 64 70;
+    67 26 20 68 02 62 12 20 95 63 94 39 63 08 40 91 66 49 94 21;
+    24 55 58 05 66 73 99 26 97 17 78 78 96 83 14 88 34 89 63 72;
+    21 36 23 09 75 00 76 44 20 45 35 14 00 61 33 97 34 31 33 95;
+    78 17 53 28 22 75 31 67 15 94 03 80 04 62 16 14 09 53 56 92;
+    16 39 05 42 96 35 31 47 55 58 88 24 00 17 54 24 36 29 85 57;
+    86 56 00 48 35 71 89 07 05 44 44 37 44 60 21 58 51 54 17 58;
+    19 80 81 68 05 94 47 69 28 73 92 13 86 52 17 77 04 89 55 40;
+    04 52 08 83 97 35 99 16 07 97 57 32 16 26 26 79 33 27 98 66;
+    88 36 68 87 57 62 20 72 03 46 33 67 46 55 12 32 63 93 53 69;
+    04 42 16 73 38 25 39 11 24 94 72 18 08 46 29 32 40 62 76 36;
+    20 69 36 41 72 30 23 88 34 62 99 69 82 67 59 85 74 04 36 16;
+    20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54;
+    01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48
+  ]
 
-    n = size(data)
-    m = 4
-    p = 0
+  n = size(data)
+  m = 4
+  p = 0
 
-    # horizontal
-    for i in 1:n[1]
-        for j in 1:n[2] - m
-            pi = prod(data[i, j:j + m - 1])
-            if pi > p
-                p = pi
-            end
-        end
+  # horizontal
+  for i in 1:n[1]
+    for j in 1:n[2]-m
+      pi = prod(data[i, j:j+m-1])
+      if pi > p
+        p = pi
+      end
     end
+  end
 
-    # vertical
-    for i in 1:n[1] - m
-        for j in 1:n[2]
-            pi = prod(data[i:i + m - 1, j])
-            if pi > p
-                p = pi
-            end
-        end
+  # vertical
+  for i in 1:n[1]-m
+    for j in 1:n[2]
+      pi = prod(data[i:i+m-1, j])
+      if pi > p
+        p = pi
+      end
     end
+  end
 
-    # copilot did not extract the diagonal but an entire submatrix
-    # diagonal bottom left to top right
-    for i in m:n[1]
-        for j in 1:n[2] - m
-            # pi = prod(data[i - m + 1:i, j:j + m - 1])
-            pi = prod(data[i - k, j + k] for k in 0:m - 1)
-            if pi > p
-                p = pi
-            end
-        end
+  # copilot did not extract the diagonal but an entire submatrix
+  # diagonal bottom left to top right
+  for i in m:n[1]
+    for j in 1:n[2]-m
+      # pi = prod(data[i - m + 1:i, j:j + m - 1])
+      pi = prod(data[i-k, j+k] for k in 0:m-1)
+      if pi > p
+        p = pi
+      end
     end
+  end
 
-    # copilot did not extract the diagonal but an entire submatrix
-    # diagonal top left to bottom right
-    for i in 1:n[1] - m
-        for j in 1:n[2] - m
-            pi = prod(data[i + k, j + k] for k in 0:m - 1)
-            if pi > p
-                p = pi
-            end
-        end
+  # copilot did not extract the diagonal but an entire submatrix
+  # diagonal top left to bottom right
+  for i in 1:n[1]-m
+    for j in 1:n[2]-m
+      pi = prod(data[i+k, j+k] for k in 0:m-1)
+      if pi > p
+        p = pi
+      end
     end
+  end
 
-    return p
+  return p
+end
+
+triangle(n) = n * (n + 1) / 2
+function divisors(n)
+  d = 0
+  for i in 1:floor(sqrt(n))
+    if n % i == 0
+      d += 1
+    end
+  end
+  return 2 * d
 end
 
 """
@@ -399,25 +480,16 @@ end
 https://projecteuler.net/problem=12
 
 # Hints: 
+- Use the Gauss formula to calculate the sum of numbers from 1:n.
+- you only have to check divisors from 1 to sqrt(n).
+- Primes.factor can also calculate prime factors.
 """
 function euler12()
-    function triangle(n)
-        return n*(n+1)/2
-    end
-    function divisors(n)
-        d = 0
-        for i in 1:floor(sqrt(n))
-            if n % i == 0
-                d += 1
-            end
-        end
-        return 2*d
-    end
-    n = 1
-    while divisors(triangle(n)) < 500
-        n += 1
-    end
-    return triangle(n)
+  n = 1
+  while divisors(triangle(n)) < 500
+    n += 1
+  end
+  return triangle(n)
 end
 
 """
@@ -426,111 +498,132 @@ end
 https://projecteuler.net/problem=13
 
 # Hints: 
+- The numbers are too large for normal data types. Normal integer types will overflow and floats will lack accurracy.
+- Julia has builtin support for BigInts which do not have these issues, you can create one with big"123".
+- To get the first ten digits, either divide repeatedly by ten or convert to string.
+- string(123) converts a number to a string.
+- parse(Int, "123") converts the string back to an Int
 """
 function euler13()
-    data = [
-        big"37107287533902102798797998220837590246510135740250",
-        big"46376937677490009712648124896970078050417018260538",
-        big"74324986199524741059474233309513058123726617309629",
-        big"91942213363574161572522430563301811072406154908250",
-        big"23067588207539346171171980310421047513778063246676",
-        big"89261670696623633820136378418383684178734361726757",
-        big"28112879812849979408065481931592621691275889832738",
-        big"44274228917432520321923589422876796487670272189318",
-        big"47451445736001306439091167216856844588711603153276",
-        big"70386486105843025439939619828917593665686757934951",
-        big"62176457141856560629502157223196586755079324193331",
-        big"64906352462741904929101432445813822663347944758178",
-        big"92575867718337217661963751590579239728245598838407",
-        big"58203565325359399008402633568948830189458628227828",
-        big"80181199384826282014278194139940567587151170094390",
-        big"35398664372827112653829987240784473053190104293586",
-        big"86515506006295864861532075273371959191420517255829",
-        big"71693888707715466499115593487603532921714970056938",
-        big"54370070576826684624621495650076471787294438377604",
-        big"53282654108756828443191190634694037855217779295145",
-        big"36123272525000296071075082563815656710885258350721",
-        big"45876576172410976447339110607218265236877223636045",
-        big"17423706905851860660448207621209813287860733969412",
-        big"81142660418086830619328460811191061556940512689692",
-        big"51934325451728388641918047049293215058642563049483",
-        big"62467221648435076201727918039944693004732956340691",
-        big"15732444386908125794514089057706229429197107928209",
-        big"55037687525678773091862540744969844508330393682126",
-        big"18336384825330154686196124348767681297534375946515",
-        big"80386287592878490201521685554828717201219257766954",
-        big"78182833757993103614740356856449095527097864797581",
-        big"16726320100436897842553539920931837441497806860984",
-        big"48403098129077791799088218795327364475675590848030",
-        big"87086987551392711854517078544161852424320693150332",
-        big"59959406895756536782107074926966537676326235447210",
-        big"69793950679652694742597709739166693763042633987085",
-        big"41052684708299085211399427365734116182760315001271",
-        big"65378607361501080857009149939512557028198746004375",
-        big"35829035317434717326932123578154982629742552737307",
-        big"94953759765105305946966067683156574377167401875275",
-        big"88902802571733229619176668713819931811048770190271",
-        big"25267680276078003013678680992525463401061632866526",
-        big"36270218540497705585629946580636237993140746255962",
-        big"24074486908231174977792365466257246923322810917141",
-        big"91430288197103288597806669760892938638285025333403",
-        big"34413065578016127815921815005561868836468420090470",
-        big"23053081172816430487623791969842487255036638784583",
-        big"11487696932154902810424020138335124462181441773470",
-        big"63783299490636259666498587618221225225512486764533",
-        big"67720186971698544312419572409913959008952310058822",
-        big"95548255300263520781532296796249481641953868218774",
-        big"76085327132285723110424803456124867697064507995236",
-        big"37774242535411291684276865538926205024910326572967",
-        big"23701913275725675285653248258265463092207058596522",
-        big"29798860272258331913126375147341994889534765745501",
-        big"18495701454879288984856827726077713721403798879715",
-        big"38298203783031473527721580348144513491373226651381",
-        big"34829543829199918180278916522431027392251122869539",
-        big"40957953066405232632538044100059654939159879593635",
-        big"29746152185502371307642255121183693803580388584903",
-        big"41698116222072977186158236678424689157993532961922",
-        big"62467957194401269043877107275048102390895523597457",
-        big"23189706772547915061505504953922979530901129967519",
-        big"86188088225875314529584099251203829009407770775672",
-        big"11306739708304724483816533873502340845647058077308",
-        big"82959174767140363198008187129011875491310547126581",
-        big"97623331044818386269515456334926366572897563400500",
-        big"42846280183517070527831839425882145521227251250327",
-        big"55121603546981200581762165212827652751691296897789",
-        big"32238195734329339946437501907836945765883352399886",
-        big"75506164965184775180738168837861091527357929701337",
-        big"62177842752192623401942399639168044983993173312731",
-        big"32924185707147349566916674687634660915035914677504",
-        big"99518671430235219628894890102423325116913619626622",
-        big"73267460800591547471830798392868535206946944540724",
-        big"76841822524674417161514036427982273348055556214818",
-        big"97142617910342598647204516893989422179826088076852",
-        big"87783646182799346313767754307809363333018982642090",
-        big"10848802521674670883215120185883543223812876952786",
-        big"71329612474782464538636993009049310363619763878039",
-        big"62184073572399794223406235393808339651327408011116",
-        big"66627891981488087797941876876144230030984490851411",
-        big"60661826293682836764744779239180335110989069790714",
-        big"85786944089552990653640447425576083659976645795096",
-        big"66024396409905389607120198219976047599490197230297",
-        big"64913982680032973156037120041377903785566085089252",
-        big"16730939319872750275468906903707539413042652315011",
-        big"94809377245048795150954100921645863754710598436791",
-        big"78639167021187492431995700641917969777599028300699",
-        big"15368713711936614952811305876380278410754449733078",
-        big"40789923115535562561142322423255033685442488917353",
-        big"44889911501440648020369068063960672322193204149535",
-        big"41503128880339536053299340368006977710650566631954",
-        big"81234880673210146739058568557934581403627822703280",
-        big"82616570773948327592232845941706525094512325230608",
-        big"22918802058777319719839450180888072429661980811197",
-        big"77158542502016545090413245809786882778948721859617",
-        big"72107838435069186155435662884062257473692284509516",
-        big"20849603980134001723930671666823555245252804609722",
-        big"53503534226472524250874054075591789781264330331690"
-    ]
-    return parse(Int, string(sum(data))[1:10])
+  data = [
+    big"37107287533902102798797998220837590246510135740250",
+    big"46376937677490009712648124896970078050417018260538",
+    big"74324986199524741059474233309513058123726617309629",
+    big"91942213363574161572522430563301811072406154908250",
+    big"23067588207539346171171980310421047513778063246676",
+    big"89261670696623633820136378418383684178734361726757",
+    big"28112879812849979408065481931592621691275889832738",
+    big"44274228917432520321923589422876796487670272189318",
+    big"47451445736001306439091167216856844588711603153276",
+    big"70386486105843025439939619828917593665686757934951",
+    big"62176457141856560629502157223196586755079324193331",
+    big"64906352462741904929101432445813822663347944758178",
+    big"92575867718337217661963751590579239728245598838407",
+    big"58203565325359399008402633568948830189458628227828",
+    big"80181199384826282014278194139940567587151170094390",
+    big"35398664372827112653829987240784473053190104293586",
+    big"86515506006295864861532075273371959191420517255829",
+    big"71693888707715466499115593487603532921714970056938",
+    big"54370070576826684624621495650076471787294438377604",
+    big"53282654108756828443191190634694037855217779295145",
+    big"36123272525000296071075082563815656710885258350721",
+    big"45876576172410976447339110607218265236877223636045",
+    big"17423706905851860660448207621209813287860733969412",
+    big"81142660418086830619328460811191061556940512689692",
+    big"51934325451728388641918047049293215058642563049483",
+    big"62467221648435076201727918039944693004732956340691",
+    big"15732444386908125794514089057706229429197107928209",
+    big"55037687525678773091862540744969844508330393682126",
+    big"18336384825330154686196124348767681297534375946515",
+    big"80386287592878490201521685554828717201219257766954",
+    big"78182833757993103614740356856449095527097864797581",
+    big"16726320100436897842553539920931837441497806860984",
+    big"48403098129077791799088218795327364475675590848030",
+    big"87086987551392711854517078544161852424320693150332",
+    big"59959406895756536782107074926966537676326235447210",
+    big"69793950679652694742597709739166693763042633987085",
+    big"41052684708299085211399427365734116182760315001271",
+    big"65378607361501080857009149939512557028198746004375",
+    big"35829035317434717326932123578154982629742552737307",
+    big"94953759765105305946966067683156574377167401875275",
+    big"88902802571733229619176668713819931811048770190271",
+    big"25267680276078003013678680992525463401061632866526",
+    big"36270218540497705585629946580636237993140746255962",
+    big"24074486908231174977792365466257246923322810917141",
+    big"91430288197103288597806669760892938638285025333403",
+    big"34413065578016127815921815005561868836468420090470",
+    big"23053081172816430487623791969842487255036638784583",
+    big"11487696932154902810424020138335124462181441773470",
+    big"63783299490636259666498587618221225225512486764533",
+    big"67720186971698544312419572409913959008952310058822",
+    big"95548255300263520781532296796249481641953868218774",
+    big"76085327132285723110424803456124867697064507995236",
+    big"37774242535411291684276865538926205024910326572967",
+    big"23701913275725675285653248258265463092207058596522",
+    big"29798860272258331913126375147341994889534765745501",
+    big"18495701454879288984856827726077713721403798879715",
+    big"38298203783031473527721580348144513491373226651381",
+    big"34829543829199918180278916522431027392251122869539",
+    big"40957953066405232632538044100059654939159879593635",
+    big"29746152185502371307642255121183693803580388584903",
+    big"41698116222072977186158236678424689157993532961922",
+    big"62467957194401269043877107275048102390895523597457",
+    big"23189706772547915061505504953922979530901129967519",
+    big"86188088225875314529584099251203829009407770775672",
+    big"11306739708304724483816533873502340845647058077308",
+    big"82959174767140363198008187129011875491310547126581",
+    big"97623331044818386269515456334926366572897563400500",
+    big"42846280183517070527831839425882145521227251250327",
+    big"55121603546981200581762165212827652751691296897789",
+    big"32238195734329339946437501907836945765883352399886",
+    big"75506164965184775180738168837861091527357929701337",
+    big"62177842752192623401942399639168044983993173312731",
+    big"32924185707147349566916674687634660915035914677504",
+    big"99518671430235219628894890102423325116913619626622",
+    big"73267460800591547471830798392868535206946944540724",
+    big"76841822524674417161514036427982273348055556214818",
+    big"97142617910342598647204516893989422179826088076852",
+    big"87783646182799346313767754307809363333018982642090",
+    big"10848802521674670883215120185883543223812876952786",
+    big"71329612474782464538636993009049310363619763878039",
+    big"62184073572399794223406235393808339651327408011116",
+    big"66627891981488087797941876876144230030984490851411",
+    big"60661826293682836764744779239180335110989069790714",
+    big"85786944089552990653640447425576083659976645795096",
+    big"66024396409905389607120198219976047599490197230297",
+    big"64913982680032973156037120041377903785566085089252",
+    big"16730939319872750275468906903707539413042652315011",
+    big"94809377245048795150954100921645863754710598436791",
+    big"78639167021187492431995700641917969777599028300699",
+    big"15368713711936614952811305876380278410754449733078",
+    big"40789923115535562561142322423255033685442488917353",
+    big"44889911501440648020369068063960672322193204149535",
+    big"41503128880339536053299340368006977710650566631954",
+    big"81234880673210146739058568557934581403627822703280",
+    big"82616570773948327592232845941706525094512325230608",
+    big"22918802058777319719839450180888072429661980811197",
+    big"77158542502016545090413245809786882778948721859617",
+    big"72107838435069186155435662884062257473692284509516",
+    big"20849603980134001723930671666823555245252804609722",
+    big"53503534226472524250874054075591789781264330331690"
+  ]
+  return parse(Int, string(sum(data))[1:10])
+end
+
+function collatz(n)
+  if n % 2 == 0
+    return n / 2
+  else
+    return 3n + 1
+  end
+end
+function collatz_length(n)
+  l = 1
+  while n != 1
+    n = collatz(n)
+    l += 1
+  end
+  return l
 end
 
 """
@@ -539,54 +632,40 @@ end
 https://projecteuler.net/problem=14
 
 # Hints: 
+- should be straightforward
 """
-function collatz(n)
-    if n % 2 == 0
-        return n/2
-    else
-        return 3n+1
-    end
-end
-function collatz_length(n)
-    l = 1
-    while n != 1
-        n = collatz(n)
-        l += 1
-    end
-    return l
-end
 function euler14()
-    max = 0
-    max_i = 0
-    for i in 1:999999
-        l = collatz_length(i)
-        if l > max
-            max = l
-            max_i = i
-        end
+  max = 0
+  max_i = 0
+  for i in 1:999999
+    l = collatz_length(i)
+    if l > max
+      max = l
+      max_i = i
     end
-    return max_i
+  end
+  return max_i
 end
 
 
+# euler 15
 """
 #Exercise:
 
 https://projecteuler.net/problem=15
 
 # Hints: 
+- Combinatorics: in an nxn square we we can go right and down, each n times.
+- We can do this in arbitrary order.
+- Imagine this as accomodating n times "l" and n times "r" in arbitrary order, e.g. [llrr]
+- how many different ways of doing this are there?
+- This is 40!/20!/20!
+- Numbers are too large for normal Ints, even though the result is not
+- Convert to integer with Int(big(123))
 """
-# euler 15
-function euler15()
-    # function factorial(n)
-    #     if n == 0
-    #         return 1
-    #     else
-    #         return n*factorial(n-1)
-    #     end
-    # end
-    # return factorial(40)/(factorial(20)*factorial(20))
-end
+euler15() = 
+  Int(factorial(big(40)) / (factorial(big(20)) * factorial(big(20))))
+
 
 """
 #Exercise:
@@ -594,13 +673,83 @@ end
 https://projecteuler.net/problem=16
 
 # Hints: 
+- Numbers are too large for normal ints again.
+- Extract digits as string or by using divmod(x, 10)
 """
 function euler16()
-    s = 0
-    for c in string(big"2" ^ big"1000")
-        s += parse(Int, c)
-    end
-    return s
+  s = 0
+  for c in string(big"2"^big"1000")
+    s += parse(Int, c)
+  end
+  return s
+end
+
+function number_to_string(n)
+  if n == 0
+    return ""
+  elseif n == 1
+    return "one"
+  elseif n == 2
+    return "two"
+  elseif n == 3
+    return "three"
+  elseif n == 4
+    return "four"
+  elseif n == 5
+    return "five"
+  elseif n == 6
+    return "six"
+  elseif n == 7
+    return "seven"
+  elseif n == 8
+    return "eight"
+  elseif n == 9
+    return "nine"
+  elseif n == 10
+    return "ten"
+  elseif n == 11
+    return "eleven"
+  elseif n == 12
+    return "twelve"
+  elseif n == 13
+    return "thirteen"
+  elseif n == 14
+    return "fourteen"
+  elseif n == 15
+    return "fifteen"
+  elseif n == 16
+    return "sixteen"
+  elseif n == 17
+    return "seventeen"
+  elseif n == 18
+    return "eighteen"
+  elseif n == 19
+    return "nineteen"
+  elseif n == 20
+    return "twenty"
+  elseif n == 30
+    return "thirty"
+  elseif n == 40
+    return "forty"
+  elseif n == 50
+    return "fifty"
+  elseif n == 60
+    return "sixty"
+  elseif n == 70
+    return "seventy"
+  elseif n == 80
+    return "eighty"
+  elseif n == 90
+    return "ninety"
+  elseif n == 100
+    return "onehundred"
+  elseif n == 1000
+    return "onethousand"
+  elseif n < 100
+    return number_to_string(floor(n / 10) * 10) * number_to_string(n % 10)
+  elseif n < 1000
+    return number_to_string(floor(n / 100)) * "hundred" * (n % 100 == 0 ? "" : "and") * number_to_string(n % 100)
+  end
 end
 
 """
@@ -609,81 +758,16 @@ end
 https://projecteuler.net/problem=17
 
 # Hints: 
+- very annoying...
+- concatenate strings with "asdf" * "qwer".
+- length("adf") gives the length of a string.
 """
 function euler17()
-# euler17
-    function number_to_string(n)
-        if n == 0
-            return ""
-        elseif n == 1
-            return "one"
-        elseif n == 2
-            return "two"
-        elseif n == 3
-            return "three"
-        elseif n == 4
-            return "four"
-        elseif n == 5
-            return "five"
-        elseif n == 6
-            return "six"
-        elseif n == 7
-            return "seven"
-        elseif n == 8
-            return "eight"
-        elseif n == 9
-            return "nine"
-        elseif n == 10
-            return "ten"
-        elseif n == 11
-            return "eleven"
-        elseif n == 12
-            return "twelve"
-        elseif n == 13
-            return "thirteen"
-        elseif n == 14
-            return "fourteen"
-        elseif n == 15
-            return "fifteen"
-        elseif n == 16
-            return "sixteen"
-        elseif n == 17
-            return "seventeen"
-        elseif n == 18
-            return "eighteen"
-        elseif n == 19
-            return "nineteen"
-        elseif n == 20
-            return "twenty"
-        elseif n == 30
-            return "thirty"
-        elseif n == 40
-            return "forty"
-        elseif n == 50
-            return "fifty"
-        elseif n == 60
-            return "sixty"
-        elseif n == 70
-            return "seventy"
-        elseif n == 80
-            return "eighty"
-        elseif n == 90
-            return "ninety"
-        elseif n == 100
-            return "onehundred"
-        elseif n == 1000
-            return "onethousand"
-        elseif n < 100
-            return number_to_string(floor(n/10)*10) * number_to_string(n % 10)
-        elseif n < 1000
-            return number_to_string(floor(n/100)) * "hundred" * (n % 100 == 0 ? "" : "and") * number_to_string(n % 100)
-        end
-    end
-    s = 0
-    for i in 1:1000
-        s += length(number_to_string(i))
-    end
-    return s
+  s = 0
+  for i in 1:1000
+    s += length(number_to_string(i))
+  end
+  return s
 end
 
 """
@@ -695,57 +779,57 @@ https://projecteuler.net/problem=18
 """
 function euler18()
 
-    data = [
-        [75],
-        [95, 64],
-        [17, 47, 82],
-        [18, 35, 87, 10],
-        [20, 04, 82, 47, 65],
-        [19, 01, 23, 75, 03, 34],
-        [88, 02, 77, 73, 07, 63, 67],
-        [99, 65, 04, 28, 06, 16, 70, 92],
-        [41, 41, 26, 56, 83, 40, 80, 70, 33],
-        [41, 48, 72, 33, 47, 32, 37, 16, 94, 29],
-        [53, 71, 44, 65, 25, 43, 91, 52, 97, 51, 14],
-        [70, 11, 33, 28, 77, 73, 17, 78, 39, 68, 17, 57],
-        [91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48],
-        [63, 66, 04, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31],
-        [04, 62, 98, 27, 23, 09, 70, 98, 73, 93, 38, 53, 60, 04, 23]
-    ]
+  data = [
+    [75],
+    [95, 64],
+    [17, 47, 82],
+    [18, 35, 87, 10],
+    [20, 04, 82, 47, 65],
+    [19, 01, 23, 75, 03, 34],
+    [88, 02, 77, 73, 07, 63, 67],
+    [99, 65, 04, 28, 06, 16, 70, 92],
+    [41, 41, 26, 56, 83, 40, 80, 70, 33],
+    [41, 48, 72, 33, 47, 32, 37, 16, 94, 29],
+    [53, 71, 44, 65, 25, 43, 91, 52, 97, 51, 14],
+    [70, 11, 33, 28, 77, 73, 17, 78, 39, 68, 17, 57],
+    [91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48],
+    [63, 66, 04, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31],
+    [04, 62, 98, 27, 23, 09, 70, 98, 73, 93, 38, 53, 60, 04, 23]
+  ]
 
-    # # greedy does not work!
-    # s = data[1][1]
-    # j = 1
-    # for i in 2:length(data)
-    #     j = data[i][j] > data[i][j+1] ? j : j+1
-    #     s += data[i][j]
-    # end
-    # return s
+  # # greedy does not work!
+  # s = data[1][1]
+  # j = 1
+  # for i in 2:length(data)
+  #     j = data[i][j] > data[i][j+1] ? j : j+1
+  #     s += data[i][j]
+  # end
+  # return s
 
-    function val(data, path)
-        s = 0
-        for i in 1:length(data)
-            s += data[i][path[i]]
-        end
-        return s
+  function val(data, path)
+    s = 0
+    for i in 1:length(data)
+      s += data[i][path[i]]
     end
+    return s
+  end
 
-    path = repeat([1], length(data))
-    maxval = val(data, path)
+  path = repeat([1], length(data))
+  maxval = val(data, path)
 
-    for j in 1:length(data) - 1
-        for i in 1:j - 1
-            path[end - i + 1] += 1
-            show(path)
-            println()
-            v = val(data, path)
-            if v > maxval
-                maxval = v
-            end
-        end
+  for j in 1:length(data)-1
+    for i in 1:j-1
+      path[end-i+1] += 1
+      show(path)
+      println()
+      v = val(data, path)
+      if v > maxval
+        maxval = v
+      end
     end
+  end
 
-    return maxval
+  return maxval
 end
 
 """
@@ -9136,7 +9220,7 @@ https://projecteuler.net/problem=857
 # Hints: 
 """
 function euler857()
-    
+
 end
 
 end # module Euler
