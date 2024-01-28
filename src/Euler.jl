@@ -59,16 +59,7 @@ https://projecteuler.net/problem=2
 - Fibonacci numbers: x1 = 1, x2 = 2, x3 = x1 + x2, x4 = x3 + x2, ...
 """
 function euler2()
-  s = 0
-  a = 1
-  b = 2
-  while a < 4_000_000
-    if a % 2 == 0
-      s += a
-    end
-    a, b = b, a + b
-  end
-  return s
+  
 end
 
 """
@@ -83,17 +74,7 @@ https://projecteuler.net/problem=3
 
 """
 function euler3()
-  n = 600851475143
-  i = 2
-  while i < n
-    d, r = divrem(n, i)
-    if r == 0
-      n = d
-    else
-      i += 1
-    end
-  end
-  return n
+  
 end
 
 """
